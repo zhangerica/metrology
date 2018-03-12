@@ -13,15 +13,15 @@ import matplotlib.pyplot as plt
 
 
 # In[ ]:
+print('make sure there is only one file with the relevant cold plate ID in the directory, else copy exact file name as raw input')
 
-
-directory = 'C:\ALICE Upgrade\ITSUsoftwareCMM\Stave\Marker Positions'
+directory = 'C:\ALICE Upgrade\ITSUsoftwareCMM\Stave\MarkerPositions'
 cp = raw_input('Enter ID of Right Cold Plate: ')
 for f in os.listdir(directory):
     if cp in f and f.endswith('.csv'):
-        path = os.path.abspath(directory + f)
+        path = os.path.abspath(directory + '\\' + f)
 #path = os.path.abspath("STAVE_MARKERPOS_2018_2_12_B-ML-Stave-0_B-HS-R-0_ALC-0312-00_026_B-HS-L-0_ALC-0312-00_120.csv")
-
+#print path
 
 # In[3]:
 
@@ -33,7 +33,7 @@ path1 = glob.glob(path)[0]
 
 
 data = pd.read_csv(open(path1), header = None, usecols = [2, 4, 5, 6])
-
+#print data
 
 # In[5]:
 
@@ -48,6 +48,7 @@ z = pd.DataFrame.get(data, 6)
 
 
 slices = data.index[label == u'MarkerCenter '].tolist()
+print slices
 one, two, three, four = slices[0], slices[1], slices[2], slices[3]
 five, six, seven, eight = slices[4], slices[5], slices[6], slices[7]
 
@@ -221,4 +222,3 @@ plt.xlabel("y [mm]")
 plt.ylabel("$\Delta$ y [$\mu$m]")
 plt.legend(bbox_to_anchor=(1, 1))
 plt.show()
-
