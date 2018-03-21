@@ -7,7 +7,7 @@
 # Plots x, y, z residuals of module markers after stave is glued to spaceframe
 
 
-# In[2]:
+# In[16]:
 
 
 import glob
@@ -18,7 +18,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# In[199]:
+# In[17]:
 
 
 directory = 'C:\ALICE Upgrade\ITSUsoftwareCMM\Stave\Marker Positions'
@@ -29,14 +29,14 @@ cp = raw_input('Enter ID of Right Cold Plate: ')
 path = os.path.abspath("STAVE_MARKERPOS_2018_1_29_B-ML-Stave-0_B-HS-R-0_ALC-0312-00_026_B-HS-L-0_ALC-0312-00_120.csv")
 
 
-# In[200]:
+# In[18]:
 
 
 data = pd.read_csv(open(path), header = None, usecols = [2, 4, 5, 6])
 label = pd.DataFrame.get(data, 2)
 
 
-# In[201]:
+# In[19]:
 
 
 slices = data.index[label == u'MarkerCenter '].tolist()
@@ -44,7 +44,7 @@ one, two, three, four = slices[0], slices[1], slices[2], slices[3]
 five, six, seven, eight = slices[4], slices[5], slices[6], slices[7]
 
 
-# In[202]:
+# In[20]:
 
 
 mod1, mod2, mod3, mod4 = data[one+1:two-4], data[two+1:three-4], data[three+1:four-4], data[four+1:five-4]
@@ -55,19 +55,19 @@ low = pd.concat([mod1, mod2, mod3, mod4])[[4, 5, 6]]
 up = pd.concat([mod5, mod6, mod7, mod8])[[4, 5, 6]]
 
 
-# In[203]:
+# In[21]:
 
 
 # z residuals
-low_dz_pos = (low[low[4] > 0][6] - 13.3)*1000
+low_dz_pos = (low[low[4] > 0][6] - 13.3) * 1000
 low_dz_pos_y = low[low[4] > 0][5]
-low_dz_neg = (low[low[4] < 0][6] - 13.3)*1000
+low_dz_neg = (low[low[4] < 0][6] - 13.3) * 1000
 low_dz_neg_y = low[low[4] < 0][5]
-up_dz = (up[6] - 9.7)*1000
+up_dz = (up[6] - 9.7) * 1000
 up_dz_y = up[5]
 
 
-# In[204]:
+# In[22]:
 
 
 # z plots
@@ -94,21 +94,22 @@ for i in [-422, -211, 0, 211, 422]:
 zup.legend(loc = 1)
     
 plt.show()
+#plt.savefig(directory + cp + '_z.png')
 
 
-# In[205]:
+# In[23]:
 
 
 # x residuals
-low_dx_pos = (low[low[4] > 0][4] - 2.099)*1000
+low_dx_pos = (low[low[4] > 0][4] - 2.099) * 1000
 low_dx_pos_y = low[low[4] > 0][5]
-low_dx_neg = (low[low[4] < 0][4] + 27.899)*1000
+low_dx_neg = (low[low[4] < 0][4] + 27.899) * 1000
 low_dx_neg_y = low[low[4] < 0][5]
-up_dx = (up[4] - 27.899)*1000
+up_dx = (up[4] - 27.899) * 1000
 up_dx_y = (up[5])
 
 
-# In[206]:
+# In[24]:
 
 
 # x plots
@@ -121,25 +122,34 @@ plt.ylim([-400, 250])
 for i in [-422, -211, 0, 211, 422]:
     plt.axvline(x = i, ymin = .1, ymax = .7, c = 'k', linewidth = .4)
 plt.legend(loc = 1)
-plt.title("$\Delta$ x")
-    
-plt.show()
+plt.title("$\Delta$ x")   
+#plt.show()
+#plt.savefig(directory + cp + '_x.png')
 
 
-# In[207]:
+# # y residuals
+# m1 = [-421.925, -211.375] # markers [a, b] for module 1
+# m2 = [-210.825, -0.275]
+# m3 = [0.275, 210.825]
+# m4 = [211.375, 421.925]
+# 
+# markers = np.concatenate([m1, m2, m3, m4])
+# Markers = np.array([m1, m2, m3, m4])
+
+# In[25]:
 
 
 # y residuals
-m1 = [-421.925, -211.375] # markers [a, b] for module 1
-m2 = [-210.825, -0.275]
-m3 = [0.275, 210.825]
+m1 = [-421.925, -211.375] # markers [a, b] for module 1 
+m2 = [-210.825, -0.275] 
+m3 = [0.275, 210.825] 
 m4 = [211.375, 421.925]
 
-markers = np.concatenate([m1, m2, m3, m4])
+markers = np.concatenate([m1, m2, m3, m4]) 
 Markers = np.array([m1, m2, m3, m4])
 
 
-# In[208]:
+# In[26]:
 
 
 X, Y, Z = 4, 5, 6
@@ -150,7 +160,6 @@ def is_missing(element):
 # replaces empty arrays resulting from points way out of tolerance with points outside the plot range
 def replace(element):
     return pd.Series([10000])
-
 
 def prepare(markers):
     for n, i in enumerate(markers):
@@ -180,7 +189,7 @@ low_ADBC = [marker_pos(hs_low, i, 0.4) for i in range(1, 5)]
 up_AB = [marker_pos(hs_up, i, 0.8) for i in range(1, 5)]
 
 
-# In[209]:
+# In[27]:
 
 
 def np_array(low_markers):
@@ -196,7 +205,7 @@ low_dc = np_array(low_dc)
 up_ab = np_array(up_AB)
 
 
-# In[210]:
+# In[28]:
 
 
 plt.plot(markers, (low_ab - markers)*1000, 'r+', label = "x = 2.099 mm")
@@ -209,4 +218,5 @@ plt.xlabel("y [mm]")
 plt.ylabel("$\Delta$ y [$\mu$m]")
 plt.legend(bbox_to_anchor=(1, 1))
 plt.show()
+#plt.savefig(directory + cp + '_y.png')
 
