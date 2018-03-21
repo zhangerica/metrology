@@ -1,7 +1,13 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
+
+
+# Plots x, y, z residuals of module markers after stave is glued to spaceframe
+
+
+# In[2]:
 
 
 import glob
@@ -12,57 +18,44 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# In[ ]:
-print('make sure there is only one file with the relevant cold plate ID in the directory, else copy exact file name as raw input')
+# In[199]:
 
-directory = 'C:\ALICE Upgrade\ITSUsoftwareCMM\Stave\MarkerPositions'
+
+directory = 'C:\ALICE Upgrade\ITSUsoftwareCMM\Stave\Marker Positions'
 cp = raw_input('Enter ID of Right Cold Plate: ')
-for f in os.listdir(directory):
-    if cp in f and f.endswith('.csv'):
-        path = os.path.abspath(directory + '\\' + f)
-#path = os.path.abspath("STAVE_MARKERPOS_2018_2_12_B-ML-Stave-0_B-HS-R-0_ALC-0312-00_026_B-HS-L-0_ALC-0312-00_120.csv")
-#print path
-
-# In[3]:
+#for f in os.listdir(directory):
+    #if cp in f and f.endswith('.csv'):
+        #path = os.path.abspath(directory + '\\' + f)
+path = os.path.abspath("STAVE_MARKERPOS_2018_1_29_B-ML-Stave-0_B-HS-R-0_ALC-0312-00_026_B-HS-L-0_ALC-0312-00_120.csv")
 
 
-path1 = glob.glob(path)[0]
+# In[200]:
 
 
-# In[4]:
-
-
-data = pd.read_csv(open(path1), header = None, usecols = [2, 4, 5, 6])
-#print data
-
-# In[5]:
-
-
+data = pd.read_csv(open(path), header = None, usecols = [2, 4, 5, 6])
 label = pd.DataFrame.get(data, 2)
-x = pd.DataFrame.get(data, 4)
-y = pd.DataFrame.get(data, 5)
-z = pd.DataFrame.get(data, 6)
 
 
-# In[6]:
+# In[201]:
 
 
 slices = data.index[label == u'MarkerCenter '].tolist()
-print slices
 one, two, three, four = slices[0], slices[1], slices[2], slices[3]
 five, six, seven, eight = slices[4], slices[5], slices[6], slices[7]
 
 
-# In[7]:
+# In[202]:
 
 
 mod1, mod2, mod3, mod4 = data[one+1:two-4], data[two+1:three-4], data[three+1:four-4], data[four+1:five-4]
 mod5, mod6, mod7, mod8 = data[five+1:six-4], data[six+1:seven-4], data[seven+1:eight-4], data[eight+1:-4]
+hs_low = [mod1, mod2, mod3, mod4]
+hs_up = [mod5, mod6, mod7, mod8]
 low = pd.concat([mod1, mod2, mod3, mod4])[[4, 5, 6]]
 up = pd.concat([mod5, mod6, mod7, mod8])[[4, 5, 6]]
 
 
-# In[8]:
+# In[203]:
 
 
 # z residuals
@@ -74,7 +67,7 @@ up_dz = (up[6] - 9.7)*1000
 up_dz_y = up[5]
 
 
-# In[9]:
+# In[204]:
 
 
 # z plots
@@ -103,7 +96,7 @@ zup.legend(loc = 1)
 plt.show()
 
 
-# In[10]:
+# In[205]:
 
 
 # x residuals
@@ -115,7 +108,7 @@ up_dx = (up[4] - 27.899)*1000
 up_dx_y = (up[5])
 
 
-# In[11]:
+# In[206]:
 
 
 # x plots
@@ -133,7 +126,7 @@ plt.title("$\Delta$ x")
 plt.show()
 
 
-# In[12]:
+# In[207]:
 
 
 # y residuals
@@ -142,74 +135,68 @@ m2 = [-210.825, -0.275]
 m3 = [0.275, 210.825]
 m4 = [211.375, 421.925]
 
-m1a, m1b = m1[0], m1[1]
-m2a, m2b = m2[0], m2[1]
-m3a, m3b = m3[0], m3[1]
-m4a, m4b = m4[0], m4[1]
-
 markers = np.concatenate([m1, m2, m3, m4])
+Markers = np.array([m1, m2, m3, m4])
 
 
-# In[13]:
+# In[208]:
 
 
-# low AD markers
-ones = mod1[abs(mod1[5]-m1a)<0.4]
-ones_a = ones[ones[4]>0][5] # A marker
-ones_d = ones[ones[4]<0][5] # D marker
+X, Y, Z = 4, 5, 6
 
-twos = mod2[abs(mod2[5]-m2a)<0.4]
-twos_a = twos[twos[4]>0][5]
-twos_d = twos[twos[4]<0][5]
+def is_missing(element):
+    return len(element) == 0
 
-threes = mod3[abs(mod3[5]-m3a)<0.4]
-threes_a = threes[threes[4]>0][5]
-threes_d = threes[threes[4]<0][5]
-
-fours = mod4[abs(mod4[5]-m4a)<0.4]
-fours_a = fours[fours[4]>0][5]
-fours_d = fours[fours[4]<0][5]
-
-# low BC markers
-Ones = mod1[abs(mod1[5]-m1b)<0.4]
-Ones_b = Ones[Ones[4]>0][5] # B marker
-Ones_c = Ones[Ones[4]<0][5] # C marker
-
-Twos = mod2[abs(mod2[5]-m2b)<0.4]
-Twos_b = Twos[Twos[4]>0][5]
-Twos_c = Twos[Twos[4]<0][5]
-
-Threes = mod3[abs(mod3[5]-m3b)<0.4]
-Threes_b = Threes[Threes[4]>0][5]
-Threes_c = Threes[Threes[4]<0][5]
-
-Fours = mod4[abs(mod4[5]-m4b)<0.4]
-Fours_b = Fours[Fours[4]>0][5]
-Fours_c = Fours[Fours[4]<0][5]
-
-# up AB markers
-five_a = mod5[abs(mod5[5]-m1a)<0.8][5]
-five_b = mod5[abs(mod5[5]-m1b)<0.8][5]
-
-six_a = mod6[abs(mod6[5]-m2a)<0.8][5]
-six_b = mod6[abs(mod6[5]-m2b)<0.8][5]
-
-seven_a = mod7[abs(mod7[5]-m3a)<0.8][5]
-seven_b = mod7[abs(mod7[5]-m3b)<0.8][5]
-
-eight_a = mod8[abs(mod8[5]-m4a)<0.8][5]
-eight_b = mod8[abs(mod8[5]-m4b)<0.8][5]
+# replaces empty arrays resulting from points way out of tolerance with points outside the plot range
+def replace(element):
+    return pd.Series([10000])
 
 
-# In[14]:
+def prepare(markers):
+    for n, i in enumerate(markers):
+        if is_missing(i):
+            markers[n] = replace(i)
+    return markers
+
+# low_or_up is either hs_low or hs_up
+def marker_pos(low_or_up, module, tolerance):
+    number = module - 1
+    mod_num = low_or_up[number]
+    ad = mod_num[abs(mod_num[Y] - Markers[number][0]) < tolerance]
+    bc = mod_num[abs(mod_num[Y] - Markers[number][1]) < tolerance]
+    if np.array_equal(np.concatenate(low_or_up), np.concatenate(hs_low)):
+        a = ad[ad[X] > 0][Y]
+        d = ad[ad[X] < 0][Y]
+        b = bc[bc[X] > 0][Y]
+        c = bc[bc[X] < 0][Y]
+        markers = [a, d, b, c]
+    else:
+        a = ad[Y]
+        b = bc[Y]
+        markers = [a, b]
+    return prepare(markers)
+
+low_ADBC = [marker_pos(hs_low, i, 0.4) for i in range(1, 5)]
+up_AB = [marker_pos(hs_up, i, 0.8) for i in range(1, 5)]
 
 
-low_ab = np.array([float(i) for i in [ones_a, Ones_b, twos_a, Twos_b, threes_a, Threes_b, fours_a, Fours_b]])
-low_dc = np.array([float(i) for i in [ones_d, Ones_c, twos_d, Twos_c, threes_d, Threes_c, fours_d, Fours_c]])
-up_ab = np.array([float(i) for i in [five_a, five_b, six_a, six_b, seven_a, seven_b, eight_a, eight_b]])
+# In[209]:
 
 
-# In[15]:
+def np_array(low_markers):
+    return np.array([n[i].item() for n in low_markers for i in [0, 1]])
+
+a_i, b_i, c_i, d_i = 0, 2, 3, 1
+
+low_ab = [[low_ADBC[i][a_i], low_ADBC[i][b_i]] for i in range(0, 4)]
+low_dc = [(low_ADBC[i][d_i], low_ADBC[i][c_i]) for i in range(0, 4)]
+
+low_ab = np_array(low_ab)
+low_dc = np_array(low_dc)
+up_ab = np_array(up_AB)
+
+
+# In[210]:
 
 
 plt.plot(markers, (low_ab - markers)*1000, 'r+', label = "x = 2.099 mm")
@@ -222,3 +209,4 @@ plt.xlabel("y [mm]")
 plt.ylabel("$\Delta$ y [$\mu$m]")
 plt.legend(bbox_to_anchor=(1, 1))
 plt.show()
+
