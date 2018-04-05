@@ -1,0 +1,14 @@
+Alwina's GUI
+>>cd home/aliceits/cernbox
+>>kinit
+>>Password: 1ts1ts1ts!
+>>. its-staves-gui.sh
+
+HIC Reception Test 
+>>su
+>>Password: PerfectLiquid
+>>cd home/aliceits/Desktop/aliceits/new-alpide-software/GUI
+>>kinit aliceitslbl
+>>Password: 1ts1ts1ts!
+>>source env.sh
+>>./GUI
