@@ -3,12 +3,21 @@ save: C-x C-s
 search: C-s
 cancel incomplete command: C-g
 
+GO TO
 go to start of line: C-a
 go to end of line: C-e
+go to start of document: esc-<
+go to end of document: esc->
+scroll right fast: C-f '->' (right arrow)
+scroll left fast: C-b '<-' (left arrow)
+go to start of block: C '^' (up arrow)
+go to end of block: C 'v' (down arrow)
+
+
 kill: C-k
 
 Copy/Cut & Paste
 set mark: C-space
 copy: M-w
 cut: C-w
-paste: C-y
+paste/yank back last thing killed: C-y
