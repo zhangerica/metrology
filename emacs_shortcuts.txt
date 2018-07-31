@@ -1,0 +1,14 @@
+quit: C-x C-c
+save: C-x C-s
+search: C-s
+cancel incomplete command: C-g
+
+go to start of line: C-a
+go to end of line: C-e
+kill: C-k
+
+Copy/Cut & Paste
+set mark: C-space
+copy: M-w
+cut: C-w
+paste: C-y
