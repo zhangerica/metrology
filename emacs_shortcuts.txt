@@ -12,6 +12,8 @@ scroll right fast: C-f '->' (right arrow)
 scroll left fast: C-b '<-' (left arrow)
 go to start of block: C '^' (up arrow)
 go to end of block: C 'v' (down arrow)
+page up: esc-v
+page down: C-v
 
 
 kill: C-k
